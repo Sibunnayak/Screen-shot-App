@@ -10,7 +10,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   // const [error, setError] = useState(false);
   const [data,setdata] = useState({height:"",width:"",timestamp:""});
-const API_KEY="dce52188456e4b10978f09ba67d2f9ad"
+const API_KEY="3ffd3c75fbcd4be6b068ca6d828ae6fb"
 const API_URL=`https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${search}&full_page="true"&fresh="true"`;
 
 
@@ -21,21 +21,32 @@ const getScreenShot = async () => {
     console.log(res);
     if(res.ok){
       console.log(res.url);
-      setImage(res.url);
-    setLoading(false);
+      // setImage(res.url);
+      saveImage(res.url);
+    
 }
+// callback();
 }
 
 const searchScreenShot =  (e) => {
   e.preventDefault();
   getScreenShot();
+  // getScreenShot(saveImage);
     setsearch('');
-    setUrl('');
+    // setUrl('');
 };
 
+//  function searchScreenShot(e,callback) {
+//   e.preventDefault();
+//    getScreenShot();   
+//     setTimeout(function() {
+//       setsearch('');
+//     callback();
+//     }, 3000);
+// }
 
 
-const saveImage = async () => {
+const saveImage = async (image) => {
   // setImage(search);
   console.log(image);
   const data = new FormData();
@@ -57,7 +68,8 @@ const saveImage = async () => {
     setUrl(cloudData.url);
     console.log(cloudData);
     setdata({height:cloudData.height,width:cloudData.width,timestamp:cloudData.created_at});
-    setImage('');
+    // setImage('');
+    setLoading(false);
     toast.success("Image Upload Successfully")
   } catch (error) {
     
@@ -80,8 +92,9 @@ const saveImage = async () => {
             />
             <button 
             onClick={searchScreenShot}
-             >Take ScreenShot</button>
-             <button onClick={saveImage}>show Image</button>
+            // onClick={(e)=>searchScreenShot(e,saveImage)}
+             >Show ScreenShot</button>
+             {/* <button onClick={saveImage}>show Image</button> */}
           </div>
           
         </div>
@@ -99,7 +112,7 @@ const saveImage = async () => {
             )}
           </div>
         ) : <>
-           <h2>wait few minutes while loading is over then click the show image </h2>
+           {/* <h2>wait few minutes while loading is over then click the show image </h2> */}
           <div className="loading"></div>
         </>}
       </div>
