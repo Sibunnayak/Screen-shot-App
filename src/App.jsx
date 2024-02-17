@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
 
-  const [image, setImage] = useState('');
+  // const [image, setImage] = useState('');
   const [urll, setUrl] = useState('');
   const [search, setsearch] = useState("");
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(false);
+  const [apii, setapii] = useState(false);
+  // const[cloud,setcloud]=useState(false);
   const [data,setdata] = useState({height:"",width:"",timestamp:""});
 const API_KEY="3ffd3c75fbcd4be6b068ca6d828ae6fb"
 const API_URL=`https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=${search}&full_page="true"&fresh="true"`;
@@ -17,11 +18,13 @@ const API_URL=`https://api.apiflash.com/v1/urltoimage?access_key=${API_KEY}&url=
 
 const getScreenShot = async () => {
   setLoading(true);
+  setapii(true);
     const res = await fetch(API_URL);
     console.log(res);
     if(res.ok){
       console.log(res.url);
       // setImage(res.url);
+      
       saveImage(res.url);
     
 }
@@ -48,6 +51,8 @@ const searchScreenShot =  (e) => {
 
 const saveImage = async (image) => {
   // setImage(search);
+  setapii(false);
+  // setcloud(true);
   console.log(image);
   const data = new FormData();
   data.append("file", image);
@@ -69,6 +74,7 @@ const saveImage = async (image) => {
     console.log(cloudData);
     setdata({height:cloudData.height,width:cloudData.width,timestamp:cloudData.created_at});
     // setImage('');
+    // setcloud(false);
     setLoading(false);
     toast.success("Image Upload Successfully")
   } catch (error) {
@@ -111,10 +117,20 @@ const saveImage = async (image) => {
               </a>
             )}
           </div>
-        ) : <>
-           {/* <h2>wait few minutes while loading is over then click the show image </h2> */}
+        ) : apii ? (
+          <>
+          <h2 className="process">
+            Flash Api For ScreenShot is Processing...
+          </h2>
           <div className="loading"></div>
-        </>}
+          </>
+        ) : (<>
+        <h2 className="process">
+          Cloudinary is Processing...
+        </h2>
+           <div className="loading"></div>
+           </>
+           )}
       </div>
     </div>
   );
